@@ -12,7 +12,7 @@ function Header() {
     <header className='bg-white text-purple-600 px-6 py-4 shadow-md'>
       <div className='container mx-auto flex flex-wrap justify-between items-center'>
         <div className='flex items-center'>
-          <img src={logo} alt='Company Logo' className='h-8 w-auto mr-4' />
+          <img src={logo} alt='Company Logo' className='h-16 w-auto mr-4' />
           <h1 className='text-xl font-semibold'>A Great Start for Families</h1>
         </div>
         <div className='hidden md:flex'>
