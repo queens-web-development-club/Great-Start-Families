@@ -6,7 +6,7 @@ function HomePage() {
     <div className=' md:text-left relative text-white'>
       <img src={responsiveImage} alt='A responsive image' className='w-full h-auto' />
 
-      <div class=' absolute  w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 sm:w-auto md:top-10 md:left-20 md:transform-none lg:top-20 xl:top-36'>
+      <div class=' absolute  w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 sm:w-auto md:top-10 md:left-20 md:transform-none lg:top-20 xl:top-32'>
         <div class='bg-opacity-60 bg-black sm:rounded-3xl p-4 md:p-6 shadow-md '>
           <h2 className='opacity-100 text-white text-2xl sm:text-4xl md:text-7xl  font-semibold mb-2 sm:mb-4 xl:text-8xl'>
             Programs for <br className='hidden sm:block' /> families in need.
