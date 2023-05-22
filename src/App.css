@@ -7,6 +7,54 @@
 .custom-rounded-border {
   border-radius: 50px;
 }
+.scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.column {
+  display: inline-block;
+  vertical-align: top;
+  width: 400px; /* Or whatever width you want for your columns */
+  white-space: normal;
+  min-width: 200px;
+}
+
+@media screen and (max-width: 1200px) {
+  .column {
+    width: 400px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .column {
+    width: 300px;
+  }
+}
+
+/* For Chrome and Safari */
+.scroll-container::-webkit-scrollbar {
+  width: 10px; /* Adjust scrollbar width */
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Add a background to the track (darker grey in this case) */
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background: #888888; /* Color of the scroll thumb */
+  border-radius: 10px; /* Roundness of the scroll thumb */
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the scroll thumb when hovered */
+}
+
+/* For Firefox */
+.scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
 
 /************************************************/
 .App-logo {
