@@ -11,21 +11,23 @@ const columns = [
 
 function Resources() {
   return (
-    <div className='bg-white px-6 py-4' id="resources">
+    <div className='px-6 py-4 bg-white' id='resources'>
       <div className='lg:m-10 '>
-        <div className='text-left mb-6'>
-          <h1 className='text-4xl font-bold mb-2'>Resources</h1>
+        <div className='mb-6 text-left'>
+          <h1 className='mb-2 text-4xl font-bold'>Resources</h1>
           <p className='text-lg '>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
         </div>
-        <div className='scroll-container text-left flex justify-between space-x-2'>
+        <div className='flex justify-between space-x-2 text-left scroll-container'>
           {columns.map((column) => (
-            <div key={column.title} className='column w-1/4 bg-white rounded-3xl m-2 shadow border-4 border-black'>
-              <img src={column.img} className='h-auto border-b-4 border-black bg-gray-300 mb-2 rounded-t-3xl' />
-              <h2 className='text-xl lg:text-3xl font-bold mb-1 ml-2 xl:ml-8'>{column.title}</h2>
-              <p className='text-gray-700 lg:text-xl mb-2 ml-2 xl:ml-8'>{column.text}</p>
-              <button className='bg-purple-600 px-4 py-2 ml-2 xl:ml-8 mb-5 lg:px-10 lg:py-3  lg:text-xl rounded-full'>Download</button>
+            <div key={column.title} className='w-1/4 m-2 bg-white border-4 border-black shadow column rounded-3xl'>
+              <img src={column.img} className='h-auto mb-2 bg-gray-300 border-b-4 border-black rounded-t-3xl' />
+              <h2 className='mb-1 ml-2 text-xl font-bold lg:text-3xl xl:ml-8'>{column.title}</h2>
+              <p className='mb-2 ml-2 text-gray-700 lg:text-xl xl:ml-8'>{column.text}</p>
+              <button className='px-4 py-2 mb-5 ml-2 transition duration-150 ease-in-out bg-purple-600 rounded-full xl:ml-8 lg:px-10 lg:py-3 lg:text-xl hover:bg-purple-500'>
+                Download
+              </button>
             </div>
           ))}
         </div>
