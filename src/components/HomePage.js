@@ -1,6 +1,10 @@
 import React from "react";
 import responsiveImage from "../assets/homekids.png"; // Replace with your image file path
 
+const scrollToSection = (section) => {
+  document.getElementById(section).scrollIntoView({ behavior: "smooth" });
+};
+
 function HomePage() {
   return (
     <div className=' md:text-left relative text-white'>
@@ -16,10 +20,16 @@ function HomePage() {
           </p>
 
           <div className='flex justify-center space-x-2 md:justify-start md:space-x-4 '>
-            <button className='bg-purple-600 text-white px-3 md:px-6 py-2 md:py-3 rounded-full  md:text-2xl xl:px-10 xl:py-5  xl:text-4xl'>
+            <button
+              className='bg-purple-600 text-white px-3 md:px-6 py-2 md:py-3 rounded-full  md:text-2xl xl:px-10 xl:py-5  xl:text-4xl'
+              onClick={() => scrollToSection("calendar")}
+            >
               Calender
             </button>
-            <button className='bg-purple-600 text-white px-3 md:px-6 py-2 md:py-3 rounded-full  md:text-2xl xl:px-10 xl:py-5 xl:text-4xl'>
+            <button
+              className='bg-purple-600 text-white px-3 md:px-6 py-2 md:py-3 rounded-full  md:text-2xl xl:px-10 xl:py-5 xl:text-4xl'
+              onClick={() => scrollToSection("resources")}
+            >
               Resources
             </button>
           </div>

@@ -8,18 +8,28 @@ function Header() {
     setMenuOpen(!menuOpen);
   };
 
+  const scrollToSection = (section) => {
+    document.getElementById(section).scrollIntoView({ behavior: "smooth" });
+    setMenuOpen(false);
+  };
+
   return (
-    <header className='bg-white text-purple-600 px-6 py-4 shadow-md'>
-      <div className='container mx-auto flex flex-wrap justify-between items-center'>
+    <header className='bg-white text-purple-600 px-2 sm:px-6 py-4 shadow-md'>
+      <div className=' container mx-auto  flex flex-wrap justify-between items-center'>
         <div className='flex items-center'>
           <img src={logo} alt='Company Logo' className='h-16 w-auto mr-4' />
           <h1 className='text-xl font-semibold'>A Great Start for Families</h1>
         </div>
         <div className='hidden md:flex'>
-          <button className='mx-2'>Home</button>
-          <button className='mx-2'>About</button>
-          <button className='mx-2'>Resources</button>
-          <button className='mx-2'>Programs</button>
+          <button className='mx-2' onClick={() => scrollToSection("about")}>
+            About
+          </button>
+          <button className='mx-2' onClick={() => scrollToSection("resources")}>
+            Resources
+          </button>
+          <button className='mx-2' onClick={() => scrollToSection("calendar")}>
+            Calender
+          </button>
           <button className='mx-2'>Contact</button>
         </div>
         <button className='md:hidden text-purple-600 focus:outline-none' onClick={toggleMenu}>
@@ -29,12 +39,19 @@ function Header() {
           </svg>
         </button>
         {/* Mobile menu */}
-        <div className={`${menuOpen ? "block" : "hidden"} md:hidden w-full mt-4`}>
-          <button className='block w-full text-left px-2 py-1'>Home</button>
-          <button className='block w-full text-left px-2 py-1'>About</button>
-          <button className='block w-full text-left px-2 py-1'>Resources</button>
-          <button className='block w-full text-left px-2 py-1'>Porgrams</button>
-          <button className='block w-full text-left px-2 py-1'>Contact</button>
+        <div className={`md:hidden w-full menu-transition ${menuOpen ? "menu-open" : ""}`}>
+          <button className='block w-full text-left px-2 py-1' onClick={() => scrollToSection("about")}>
+            About
+          </button>
+          <button className='block w-full text-left px-2 py-1' onClick={() => scrollToSection("resources")}>
+            Resources
+          </button>
+          <button className='block w-full text-left px-2 py-1' onClick={() => scrollToSection("calendar")}>
+            Calendar
+          </button>
+          <button className='block w-full text-left px-2 py-1' onClick={() => scrollToSection("contact")}>
+            Contact
+          </button>
         </div>
       </div>
     </header>

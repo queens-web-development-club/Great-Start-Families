@@ -11,7 +11,7 @@ const columns = [
 
 function Resources() {
   return (
-    <div className='bg-white px-6 py-4'>
+    <div className='bg-white px-6 py-4' id="resources">
       <div className='lg:m-10 '>
         <div className='text-left mb-6'>
           <h1 className='text-4xl font-bold mb-2'>Resources</h1>

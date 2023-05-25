@@ -4,6 +4,16 @@
 
 /* Custom CSS */
 /************************************************/
+.menu-transition {
+  transition: max-height 0.5s ease-in-out;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.menu-open {
+  max-height: 500px; /* You should adjust this value to fit your needs */
+}
+
 .custom-rounded-border {
   border-radius: 50px;
 }
