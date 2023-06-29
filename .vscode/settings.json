@@ -8,5 +8,6 @@
     "javascriptreact": "javascript",
     "typescript": "typescript",
     "typescriptreact": "typescript"
-  }
+  },
+  "git.ignoreLimitWarning": true
 }
