@@ -5,7 +5,7 @@ import HomePage from "./components/HomePage";
 import AboutPage from "./components/AboutPage";
 import Resources from "./components/Resources";
 import Calendar from "./components/Calendar";
-
+import ContactUs from "./components/ContactUs";
 function App() {
   return (
     <div className='App'>
@@ -14,6 +14,7 @@ function App() {
       <AboutPage />
       <Resources />
       <Calendar />
+      <ContactUs />
     </div>
   );
 }
