@@ -13,7 +13,7 @@ function Calendar() {
         </div>
         <div className='p-2 border-4 border-black rounded-3xl sm:px-6 sm:py-4 sm:m-3 lg:m-10'>
           <Iframe
-            url='https://calendar.google.com/calendar/embed?src=9cb8d170664b3d7a8c3185b40377de3d1f1ccf6e9612d0439cdc2b84c9776638%40group.calendar.google.com&ctz=America%2FToronto'
+            url='https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FToronto&src=Z3JlYXRzdGFydGZvcmZhbWlsaWVza3dAZ21haWwuY29t&src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4uY2FuYWRpYW4jaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23039BE5&color=%2333B679&color=%230B8043'
             width='100%'
             height='600px'
             id='myId'

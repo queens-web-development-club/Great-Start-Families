@@ -16,7 +16,7 @@ function HomePage() {
             Programs for <br className='hidden sm:block' /> families in need.
           </h2>
           <p className='mb-4 opacity-100 text-md md:text-base xl:text-3xl'>
-            Monlthy events organized by the Kingston community. <br className='hidden sm:block' /> Anyone of all ages can drop by!
+            Make your community bigger! <br className='hidden sm:block' /> Let us help you go from surviving to thriving.
           </p>
 
           <div className='flex justify-center space-x-2 md:justify-start md:space-x-4 '>

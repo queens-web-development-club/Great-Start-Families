@@ -1,12 +1,12 @@
 import React from "react";
-import responsiveImage1 from "../assets/Resource.png";
-import responsiveImage2 from "../assets/Resource2.jpg";
-import responsiveImage3 from "../assets/Resource2.jpg";
+import responsiveImage1 from "../assets//resourses/Nutrition.png";
+import responsiveImage2 from "../assets//resourses/YOUTH.png";
+import responsiveImage3 from "../assets//resourses/baby_care.png";
 
 const columns = [
   { title: "Story Time", img: responsiveImage1, text: "Some information about this  epic first column." },
-  { title: "Parental Help", img: responsiveImage1, text: "Some information about this second column." },
-  { title: "Title 3", img: responsiveImage1, text: "Some information about this third column." },
+  { title: "Parental Help", img: responsiveImage2, text: "Some information about this second column." },
+  { title: "Title 3", img: responsiveImage3, text: "Some information about this third column." },
 ];
 
 function Resources() {
@@ -15,9 +15,7 @@ function Resources() {
       <div className='lg:m-10 '>
         <div className='mb-6 text-left'>
           <h1 className='mb-2 text-4xl font-bold'>Resources</h1>
-          <p className='text-lg '>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
+          <p className='text-lg '>All of our programs and services are free.</p>
         </div>
         <div className='flex justify-between space-x-2 text-left scroll-container'>
           {columns.map((column) => (
