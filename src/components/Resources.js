@@ -4,9 +4,9 @@ import responsiveImage2 from "../assets/resourses/YOUTH.png";
 import responsiveImage3 from "../assets/resourses/baby_care.png";
 
 const columns = [
-  { title: "Story Time", img: responsiveImage1, text: "Some information about this epic first column.", fileUrl: "../../file1.pdf" },
-  { title: "Parental Help", img: responsiveImage2, text: "Some information about this second column.", fileUrl: "../../file2.pdf" },
-  { title: "Title 3", img: responsiveImage3, text: "Some information about this third column.", fileUrl: "../../file3.pdf" },
+  { title: "Story Time", img: responsiveImage1, text: "Some information about this epic first column.", fileUrl: "../assets/resources/test.pdf" },
+  { title: "Parental Help", img: responsiveImage2, text: "Some information about this second column.", fileUrl: "../assets/resources/test.pdf" },
+  { title: "Title 3", img: responsiveImage3, text: "Some information about this third column.", fileUrl: "../assets/resources/test.pdf" },
 ];
 
 function Resources() {
