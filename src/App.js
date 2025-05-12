@@ -6,6 +6,7 @@ import AboutPage from "./components/AboutPage";
 import Resources from "./components/Resources";
 import Calendar from "./components/Calendar";
 import ContactUs from "./components/ContactUs";
+import Admin from "./admin/admin";
 function App() {
   return (
     <div className='App'>
@@ -15,6 +16,7 @@ function App() {
       <Resources />
       <Calendar />
       <ContactUs />
+      <Admin />
     </div>
   );
 }
