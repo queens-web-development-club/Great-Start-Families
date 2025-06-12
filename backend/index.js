@@ -9,6 +9,24 @@ const NodeCache = require('node-cache');
 const {Storage} = require('@google-cloud/storage');
 const fs = require('fs');
 const path = require('path');
+const admin = require('firebase-admin');
+const serviceAccount = require('./credentials.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
+const db = admin.firestore();
+
+async function test(db) {
+    const resourcesCollection = db.collection('resources');
+    const snapshot = await resourcesCollection.get();
+    snapshot.forEach(doc => {
+        console.log(doc.id, '=>', doc.data());
+    });
+}
+
+test(db).catch(console.error);
 
 const app = express();
 const port = process.env.PORT || 5000;
