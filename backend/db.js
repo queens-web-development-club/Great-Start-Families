@@ -15,8 +15,8 @@ db.serialize(() => {
         CREATE TABLE IF NOT EXISTS uploads (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
-            image_url TEXT NO NULL,
-            pdf_url TEXT NOT NULL
+            image BLOB NOT NULL,
+            pdf BLOB NOT NULL
         )
     `);
 });
