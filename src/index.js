@@ -5,15 +5,26 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Admin from "./admin/admin";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from './admin/login';
+import ProtectedRoute from './routes/ProtectedRoute';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
     <Router>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   </React.StrictMode>
