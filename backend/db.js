@@ -16,7 +16,8 @@ db.serialize(() => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
             image BLOB NOT NULL,
-            pdf BLOB NOT NULL
+            pdf BLOB NOT NULL,
+            selected INTEGER NOT NULL DEFAULT 0
         )
     `);
 });

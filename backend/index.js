@@ -101,23 +101,123 @@ app.post('/upload', authenticateToken, upload.fields([
     );
 });
 
-// app.get('/item:id', (req, res) => {
-//     const itemId = req.params.id;
-//     db.get(
-//         `SELECT * FROM uploads WHERE id = ?`,
-//         [itemId],
-//         (err, item) => {
-//             if (err) {
-//                 console.error(err.message);
-//                 return res.status(500).json({ message: 'Failed to retrieve item' });
-//             }
-//             if (!item) {
-//                 return res.status(404).json({ message: 'Item not found' });
-//             }
-//             res.status(200).json(item);
-//         }
-//     );
-// });
+app.get('/items/public', (req, res) => {
+    db.all(`SELECT id, title, selected FROM uploads WHERE selected = ?`, [1], (err, items) => {
+        if (err) {
+            console.error('Error fetching item:', err);
+            return res.status(500).json({ message: 'Error fetching item' });
+        }
+        if (!items) {
+            console.error('Items not found:');
+            return res.status(404).json({ message: 'Items not found' });
+        }
+        const itemsList = items.map(item => ({ id: item.id, title: item.title }));
+        res.status(200).json(itemsList);
+    });
+});
+
+app.get('/item/:id/public/image', (req, res) => {
+    const itemId = req.params.id;
+    db.get(`SELECT image, selected FROM uploads WHERE id = ? AND selected = ?`, [itemId, 1], (err, row) => {
+        if (err || !row) {
+            console.error('Error fetching image:', err);
+            return res.status(404).json({ message: 'Image not found' });
+        }
+        res.set('Content-Type', 'image/png');
+        res.send(row.image);
+    });
+});
+
+app.get('/item/:id/public/pdf', (req, res) => {
+    const itemId = req.params.id;
+    db.get(`SELECT pdf, selected FROM uploads WHERE id = ? AND selected = ?`, [itemId, 1], (err, row) => {
+        if (err || !row) {
+            console.error('Error fetching pdf:', err);
+            return res.status(404).json({ message: 'PDF not found' });
+        }
+        res.set('Content-Type', 'application/pdf');
+        res.send(row.pdf);
+    });
+});
+
+app.get('/items/private', authenticateToken, (req, res) => {
+    db.all(`SELECT id, title FROM uploads`, [], (err, rows) => {
+        if (err) {
+            console.error('Error fetching items:', err);
+            return res.status(500).json({ message: 'Error fetching items' });
+        }
+        if (!rows) {
+            console.error('No items found');
+            return res.status(404).json({ message: 'No items found' });
+        }
+        const items = rows.map(row => ({ id: row.id, title: row.title }));
+        res.status(200).json(items);
+    });
+});
+
+app.get('/item/private/:id/image', authenticateToken, (req, res) => {
+    const itemId = req.params.id;
+    db.get(`SELECT image FROM uploads WHERE id = ?`, [itemId], (err, row) => {
+        if (err || !row) {
+            console.error('Error fetching image:', err);
+            return res.status(404).json({ message: 'Error fetching image' });
+        }
+        res.set('Content-Type', 'image/png');
+        res.send(row.image);
+    });
+});
+
+app.get('/item/private/:id/pdf', authenticateToken, (req, res) => {
+        const itemId = req.params.id;
+    db.get(`SELECT pdf FROM uploads WHERE id = ?`, [itemId], (err, row) => {
+        if (err || !row) {
+            console.error('Error fetching pdf:', err);
+            return res.status(404).json({ message: 'Error fetching pdf' });
+        }
+        res.set('Content-Type', 'application/pdf');
+        res.send(row.pdf);
+    });
+});
+
+//TEST
+app.post('/items/private', authenticateToken, (req, res) => {
+    const { selected, deleted } = req.body;
+    if (!Array.isArray(selected) || !Array.isArray(deleted)) {
+        console.error('Invalid input data');
+        return res.status(400).json({ message: 'Invalid input data' });
+    }
+    const updatePromises = selected.map(id => {
+        return new Promise((resolve, reject) => {
+            db.run(`UPDATE uploads SET selected = 1 WHERE id = ?`, [id], (err) => {
+                if (err) {
+                    console.error('Error updating item:', err);
+                    return reject(err);
+                }
+                resolve();
+            });
+        });
+    });
+    const deletePromises = deleted.map(id => {
+        return new Promise((resolve, reject) => {
+            db.run(`DELETE FROM uploads WHERE id = ?`, [id], (err) => {
+                if (err) {
+                    console.error('Error deleting item:', err);
+                    return reject(err);
+                }
+                resolve();
+            });
+        });
+    });
+    Promise.all([...updatePromises, ...deletePromises])
+        .then(() => {
+            console.log('Items updated successfully');
+            res.status(200).json({ message: 'Items updated successfully' });
+        })
+        .catch(err => {
+            console.error('Error updating items:', err);
+            res.status(500).json({ message: 'Error updating items' });
+        });
+});
 
 function authenticateToken(req, res, next) {
     const token = req.headers['authorization']?.split(' ')[1];
