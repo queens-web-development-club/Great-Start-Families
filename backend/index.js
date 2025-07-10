@@ -3,15 +3,16 @@ const db = require('./db');
 
 const express = require('express');
 const cors = require('cors');
-const {Storage} = require('@google-cloud/storage');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+const NodeCache = require('node-cache');
 
 const app = express();
 const port = process.env.PORT || 5000;
 const TOKEN = process.env.JWT_SECRET;
 const upload = multer();
+const cache = new NodeCache({ stdTTL: 86400});
 
 app.use(cors());
 app.use(express.json());
@@ -102,6 +103,11 @@ app.post('/upload', authenticateToken, upload.fields([
 });
 
 app.get('/items/public', (req, res) => {
+    const cachedItems = cache.get('publicItems');
+    if (cachedItems) {
+        console.log('Serving from cache');
+        return res.status(200).json(cachedItems);
+    }
     db.all(`SELECT id, title, description, selected FROM uploads WHERE selected = ?`, [1], (err, items) => {
         if (err) {
             console.error('Error fetching item:', err);
@@ -112,6 +118,7 @@ app.get('/items/public', (req, res) => {
             return res.status(404).json({ message: 'Items not found' });
         }
         const itemsList = items.map(item => ({ id: item.id, title: item.title, description: item.description }));
+        cache.set('publicItems', itemsList);
         res.status(200).json(itemsList);
     });
 });
@@ -210,6 +217,7 @@ app.post('/items/private', authenticateToken, (req, res) => {
     Promise.all([...updatePromises, ...deletePromises])
         .then(() => {
             console.log('Items updated successfully');
+            cache.del('publicItems');
             res.status(200).json({ message: 'Items updated successfully' });
         })
         .catch(err => {
