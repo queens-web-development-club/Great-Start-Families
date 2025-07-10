@@ -75,21 +75,21 @@ app.post('/upload', authenticateToken, upload.fields([
     { name: 'image', maxCount: 1 },
     { name: 'pdf', maxCount: 1 }
 ]), (req, res) => {
-    const {title} = req.body;
+    const {title, description} = req.body;
     const imageFile = req.files['image']?.[0];
     const pdfFile = req.files['pdf']?.[0];
 
-    if (!title || !imageFile || !pdfFile) {
+    if (!title || !description || !imageFile || !pdfFile) {
         console.error('Missing required fields');
-        return res.status(400).json({ message: 'Title, image, and PDF are required' });
+        return res.status(400).json({ message: 'Title, description, image, and PDF are required' });
     }
 
     const imageBuffer = imageFile.buffer;
     const pdfBuffer = pdfFile.buffer;
 
     db.run(
-        `INSERT INTO uploads (title, image, pdf) VALUES (?, ?, ?)`,
-        [title, imageBuffer, pdfBuffer],
+        `INSERT INTO uploads (title, description, image, pdf) VALUES (?, ?, ?, ?)`,
+        [title, description, imageBuffer, pdfBuffer],
         function(err) {
             if (err) {
                 console.error(err.message);
@@ -102,7 +102,7 @@ app.post('/upload', authenticateToken, upload.fields([
 });
 
 app.get('/items/public', (req, res) => {
-    db.all(`SELECT id, title, selected FROM uploads WHERE selected = ?`, [1], (err, items) => {
+    db.all(`SELECT id, title, description, selected FROM uploads WHERE selected = ?`, [1], (err, items) => {
         if (err) {
             console.error('Error fetching item:', err);
             return res.status(500).json({ message: 'Error fetching item' });
@@ -111,7 +111,7 @@ app.get('/items/public', (req, res) => {
             console.error('Items not found:');
             return res.status(404).json({ message: 'Items not found' });
         }
-        const itemsList = items.map(item => ({ id: item.id, title: item.title }));
+        const itemsList = items.map(item => ({ id: item.id, title: item.title, description: item.description }));
         res.status(200).json(itemsList);
     });
 });
@@ -141,7 +141,7 @@ app.get('/item/:id/public/pdf', (req, res) => {
 });
 
 app.get('/items/private', authenticateToken, (req, res) => {
-    db.all(`SELECT id, title, selected FROM uploads`, [], (err, rows) => {
+    db.all(`SELECT id, title, description, selected FROM uploads`, [], (err, rows) => {
         if (err) {
             console.error('Error fetching items:', err);
             return res.status(500).json({ message: 'Error fetching items' });
@@ -150,7 +150,7 @@ app.get('/items/private', authenticateToken, (req, res) => {
             console.error('No items found');
             return res.status(404).json({ message: 'No items found' });
         }
-        const items = rows.map(row => ({ id: row.id, title: row.title, selected: row.selected }));
+        const items = rows.map(row => ({ id: row.id, title: row.title, description: row.description, selected: row.selected }));
         res.status(200).json(items);
     });
 });

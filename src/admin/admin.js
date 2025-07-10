@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 
 function Admin() {
     const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
     const [pdf, setPdf] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -26,6 +27,7 @@ function Admin() {
 
         const formData = new FormData();
         formData.append('title', title);
+        formData.append('description', description);
         if (image) formData.append('image', image);
         if (pdf) formData.append('pdf', pdf);
 
@@ -41,6 +43,7 @@ function Admin() {
             if (res.ok) {
                 setMessage('Upload successful!');
                 setTitle('');
+                setDescription('');
                 setImage(null);
                 setPdf(null);
             } else {
@@ -156,6 +159,15 @@ function Admin() {
                     />
                 </label>
                 <label className="font-semibold text-purple-700">
+                    Description
+                    <textarea
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                        className="mt-1 block w-full border border-purple-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                        required
+                    />
+                </label>
+                <label className="font-semibold text-purple-700">
                     Image
                     <input
                         type="file"
@@ -194,6 +206,7 @@ function Admin() {
                     items.map(item => (
                         <div key={item.id} className="border-b border-purple-200 pb-4 mb-4">
                             <h3 className="text-purple-800 font-semibold">{item.title}</h3>
+                            <p className="text-purple-600">{item.description}</p>
                             <div className="mt-2">
                                 <img
                                     src={itemImages[item.id] || ''}

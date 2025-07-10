@@ -15,6 +15,7 @@ db.serialize(() => {
         CREATE TABLE IF NOT EXISTS uploads (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
+            description TEXT NOT NULL,
             image BLOB NOT NULL,
             pdf BLOB NOT NULL,
             selected INTEGER NOT NULL DEFAULT 0
