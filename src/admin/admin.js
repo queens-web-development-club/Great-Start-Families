@@ -9,6 +9,8 @@ function Admin() {
     const [items, setItems] = useState([]);
     const [itemImages, setItemImages] = useState({});
     const [itemPdfs, setItemPdfs] = useState({});
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [deletedItems, setDeletedItems] = useState([]);
 
 
     const handleSubmit = async (e) => {
@@ -67,6 +69,8 @@ function Admin() {
                 fetchItemImage(item.id);
                 fetchItemPdf(item.id);
             });
+            setSelectedItems(data.filter(item => item.selected).map(item => item.id));
+            console.log('Selected items:', selectedItems);
         } catch (err) {
             console.error('Error fetching items:', err);
         }
@@ -107,6 +111,30 @@ function Admin() {
     useEffect(() => {
         fetchItems();
     }, []);
+
+    const handleApplyChanges = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/items/private`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    selected: selectedItems,
+                    deleted: deletedItems
+                })
+            });
+            if (!res.ok) throw new Error('Failed to apply changes');
+            const data = await res.json();
+            console.log('Changes applied:', data);
+            fetchItems();
+        } catch (err) {
+            console.error('Error applying changes:', err);
+            setMessage('Failed to apply changes.');
+        }
+    }
 
 
     return (
@@ -159,7 +187,7 @@ function Admin() {
                 )}
             </form>
             <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-4">
-                <h2 className="text-2xl font-bold text-purple-800 mb-4">All Uploads</h2>
+                <h2 className="text-2xl font-bold text-purple-800 mb-4">All Resources</h2>
                 {items.length === 0 ? (
                     <p className="text-purple-700">No items uploaded yet.</p>
                 ) : (
@@ -173,7 +201,7 @@ function Admin() {
                                     className="rounded shadow"
                                 />
                             </div>
-                            <div className="mt-2">
+                            <div className="mt-2 flex flex-row gap-2 items-center justify-between">
                                 <a
                                     href={itemPdfs[item.id] || '#'}
                                     target="_blank"
@@ -182,10 +210,55 @@ function Admin() {
                                 >
                                     View PDF
                                 </a>
+                                <button
+                                    className={`px-3 py-1 rounded font-semibold ${
+                                        selectedItems.includes(item.id)
+                                            ? 'bg-green-500 text-white'
+                                            : 'bg-purple-300 text-purple-800'
+                                    }`}
+                                    onClick={() => {
+                                        setSelectedItems(prev =>
+                                            prev.includes(item.id)
+                                                ? prev.filter(id => id !== item.id)
+                                                : [...prev, item.id]
+                                        );
+                                        setDeletedItems(prev => prev.filter(id => id !== item.id));
+                                        console.log('Selected items:', selectedItems);
+                                    }}
+                                >
+                                    {selectedItems.includes(item.id) ? 'Selected' : 'Select'}
+                                </button>
+                                <button
+                                    className={`px-3 py-1 rounded font-semibold ${
+                                        deletedItems.includes(item.id)
+                                            ? 'bg-red-500 text-white'
+                                            : 'bg-purple-100 text-purple-800'
+                                    }`}
+                                    onClick={() => {
+                                        setDeletedItems(prev =>
+                                            prev.includes(item.id)
+                                                ? prev.filter(id => id !== item.id)
+                                                : [...prev, item.id]
+                                        );
+                                        setSelectedItems(prev =>
+                                            prev.filter(id => id !== item.id)
+                                        );
+                                        console.log('deleted items:', deletedItems);
+                                        console.log('Selected items after deletion:', selectedItems);
+                                    }}
+                                >
+                                    {deletedItems.includes(item.id) ? 'Deleted' : 'Delete'}
+                                </button>
                             </div>
                         </div>
                     ))
                 )}
+                <button
+                    onClick={handleApplyChanges}
+                    className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors"
+                >
+                    Apply Changes
+                </button>
             </div>
         </div>
     );

@@ -141,7 +141,7 @@ app.get('/item/:id/public/pdf', (req, res) => {
 });
 
 app.get('/items/private', authenticateToken, (req, res) => {
-    db.all(`SELECT id, title FROM uploads`, [], (err, rows) => {
+    db.all(`SELECT id, title, selected FROM uploads`, [], (err, rows) => {
         if (err) {
             console.error('Error fetching items:', err);
             return res.status(500).json({ message: 'Error fetching items' });
@@ -150,7 +150,7 @@ app.get('/items/private', authenticateToken, (req, res) => {
             console.error('No items found');
             return res.status(404).json({ message: 'No items found' });
         }
-        const items = rows.map(row => ({ id: row.id, title: row.title }));
+        const items = rows.map(row => ({ id: row.id, title: row.title, selected: row.selected }));
         res.status(200).json(items);
     });
 });
@@ -179,7 +179,6 @@ app.get('/item/private/:id/pdf', authenticateToken, (req, res) => {
     });
 });
 
-//TEST
 app.post('/items/private', authenticateToken, (req, res) => {
     const { selected, deleted } = req.body;
     if (!Array.isArray(selected) || !Array.isArray(deleted)) {
