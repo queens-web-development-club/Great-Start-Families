@@ -24,7 +24,12 @@ app.get('/', (_, res) => {
 });
 
 app.post('/register', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, register } = req.body;
+
+    if (register !== process.env.REGISTER_SECRET) {
+        console.error('Invalid registration secret');
+        return res.status(403).json({ message: 'Invalid registration secret' });
+    }
 
     const saltRounds = 10;
     const hash = await bcrypt.hash(password, saltRounds);
