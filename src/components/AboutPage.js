@@ -22,12 +22,21 @@ function AboutPage() {
       </div>
       <div className='flex flex-col sm:w-1/2 sm:pr-3 lg:pr-10 xl:pr-32 sm:pl-3 sm:pb-10 '>
         <h1 className='p-2 mt-5 text-3xl font-bold sm:mb-4 sm:p-0 sm:text-5xl sm:mt-20'>
-          WE OFFER <span className='text-purple-600'>YOU</span>
+          WE <span className='text-purple-600'>OFFER</span>
         </h1>
-        <ul className='m-2 list-disc text-left p-2 pl-5 sm:pl-5 mt-5 mb-4 text-xl sm:text-2xl'>
+        <p className='m-2 p-2 text-xl sm:text-2xl'>
+          a judgment free place for families with children 0 to 6 years of age as well as expecting parents to connect with programs and services available throughout the city.
+        </p>
+        <p className='m-2 p-2 text-xl sm:text-2xl'>
+          Our goal is to help families with early support programs to provide the help they need to be successful and thriving in raising their children.
+        </p>
+        <h2 className='m-2 p-2 text-2xl sm:text-3xl font-bold'>We offer you:</h2>
+        <ul className='m-2 list-disc text-left p-2 pl-5 sm:pl-5 mt-2 mb-4 text-xl sm:text-2xl'>
           <li>Programs for caregivers from prenatal to 6 years of age</li>
-          <li>Childminding available on-site, caregivers can access services while their children are cared for on-site</li>
+          <li>Childminding available on-site</li>
           <li>Parenting Programs</li>
+          <li>Prenatal Programs</li>
+          <li>Transportation assistance</li>
           <li>Family Activities</li>
           <li>Indigenous Supports</li>
           <li>Cooking Programs</li>
