@@ -28,7 +28,7 @@ function Header() {
             Resources
           </button>
           <button className='p-2 mx-2 hover:bg-opacity-60 hover:bg-gray-400 rounded-3xl' onClick={() => scrollToSection("calendar")}>
-            Calender
+            Calendar
           </button>
           <button className='p-2 mx-2 hover:bg-opacity-60 hover:bg-gray-400 rounded-3xl'>Contact</button>
         </div>

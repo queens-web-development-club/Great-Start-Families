@@ -46,7 +46,7 @@ function AboutPage() {
           className='w-40 py-3 ml-auto mr-auto text-xl transition duration-150 ease-in-out bg-purple-600 rounded-full hover:bg-purple-500 sm:mt-5 sm:m-0'
           onClick={() => scrollToSection("calendar")}
         >
-          Calender
+          Calendar
         </button>
       </div>
     </div>

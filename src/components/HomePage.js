@@ -24,7 +24,7 @@ function HomePage() {
               className='px-3 py-2 text-white transition duration-150 ease-in-out bg-purple-600 rounded-full hover:bg-purple-500 md:px-6 md:py-3 md:text-2xl xl:px-10 xl:py-5 xl:text-4xl'
               onClick={() => scrollToSection("calendar")}
             >
-              Calender
+              Calendar
             </button>
             <button
               className='px-3 py-2 text-white transition duration-150 ease-in-out bg-purple-600 rounded-full hover:bg-purple-500 md:px-6 md:py-3 md:text-2xl xl:px-10 xl:py-5 xl:text-4xl'
