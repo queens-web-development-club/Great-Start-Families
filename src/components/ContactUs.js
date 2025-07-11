@@ -47,7 +47,7 @@ function ContactUs() {
         <div className='pt-4'>Message</div>
         <textarea type='submit' name='message' className='bg-gray-200 border border-black rounded-xl w-64 md:w-72  h-20'></textarea>
         <div>
-          <button className='px-5 py-2 mb-5 ml-2 transition duration-150 ease-in-out bg-purple-600 rounded-full lg:px-10 lg:text-base hover:bg-purple-500 text-white'>
+          <button className='px-5 py-2 mb-5 mt-3 ml-1 transition duration-150 ease-in-out bg-purple-600 rounded-full lg:px-10 lg:text-base hover:bg-purple-500 text-white'>
             Send
           </button>
         </div>
