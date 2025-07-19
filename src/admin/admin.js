@@ -12,6 +12,7 @@ function Admin() {
     const [itemPdfs, setItemPdfs] = useState({});
     const [selectedItems, setSelectedItems] = useState([]);
     const [deletedItems, setDeletedItems] = useState([]);
+    const [htitle, setHtitle] = useState('');
 
 
     const handleSubmit = async (e) => {
@@ -74,6 +75,7 @@ function Admin() {
             });
             setSelectedItems(data.filter(item => item.selected).map(item => item.id));
             console.log('Selected items:', selectedItems);
+
         } catch (err) {
             console.error('Error fetching items:', err);
         }
@@ -111,8 +113,25 @@ function Admin() {
         }
     };
 
+    const fetchHomeScreenTitle = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/title`, {
+                headers: {
+                    'authorization': `Bearer ${token}`,
+                },
+            });
+            if (!res.ok) throw new Error('Failed to fetch home screen title');
+            const data = await res.json();
+            setHtitle(data.title);
+        } catch (err) {
+            console.error('Error fetching home screen title:', err);
+        }
+    };
+
     useEffect(() => {
         fetchItems();
+        fetchHomeScreenTitle();
     }, []);
 
     const handleApplyChanges = async () => {
@@ -139,14 +158,51 @@ function Admin() {
         }
     }
 
+    const handleApplyHChanges = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/title`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ title: htitle })
+            });
+            if (!res.ok) throw new Error('Failed to apply home screen title changes');
+            const data = await res.json();
+            console.log('Home screen title updated:', data);
+        } catch (err) {
+            console.error('Error updating home screen title:', err);
+            setMessage('Failed to update home screen title.');
+        }
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-purple-200 to-purple-400 flex flex-col items-center justify-center p-4">
             <h1 className="text-4xl font-bold text-purple-800 mb-4">Admin</h1>
             <p className="mb-6 text-purple-700">Welcome to the admin panel!</p>
+            <form className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+                <label className="font-semibold text-purple-700">
+                    Home Screen Title
+                    <input
+                        type="text"
+                        value={htitle}
+                        onChange={e => setHtitle(e.target.value)}
+                        className='mt-1 block w-full border border-purple-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400'
+                        required
+                    />
+                </label>
+                <button
+                    onClick={handleApplyHChanges}
+                    className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors"
+                >
+                    Apply Changes
+                </button>
+            </form>
             <form
                 onSubmit={handleSubmit}
-                className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md flex flex-col gap-4 mb-8"
+                className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md flex flex-col gap-4 my-8"
             >
                 <label className="font-semibold text-purple-700">
                     Title

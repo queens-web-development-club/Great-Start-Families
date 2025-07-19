@@ -180,7 +180,7 @@ app.get('/item/private/:id/image', authenticateToken, (req, res) => {
 });
 
 app.get('/item/private/:id/pdf', authenticateToken, (req, res) => {
-        const itemId = req.params.id;
+    const itemId = req.params.id;
     db.get(`SELECT pdf FROM uploads WHERE id = ?`, [itemId], (err, row) => {
         if (err || !row) {
             console.error('Error fetching pdf:', err);
@@ -197,6 +197,7 @@ app.post('/items/private', authenticateToken, (req, res) => {
         console.error('Invalid input data');
         return res.status(400).json({ message: 'Invalid input data' });
     }
+    cache.del('publicItems');
     const updatePromises = selected.map(id => {
         return new Promise((resolve, reject) => {
             db.run(`UPDATE uploads SET selected = 1 WHERE id = ?`, [id], (err) => {
@@ -206,6 +207,29 @@ app.post('/items/private', authenticateToken, (req, res) => {
                 }
                 resolve();
             });
+        });
+    });
+    const unselectPromises = new Promise((resolve, reject) => {
+        db.all(`SELECT id FROM uploads WHERE selected = 1`, [], (err, rows) => {
+            if (err) {
+                console.error('Error fetching selected items:', err);
+                return reject(err);
+            }
+            const idsToUnselect = rows
+                .map(row => row.id)
+                .filter(id => !selected.includes(id));
+            const promises = idsToUnselect.map(id => {
+                return new Promise((res, rej) => {
+                    db.run(`UPDATE uploads SET selected = 0 WHERE id = ?`, [id], (err) => {
+                        if (err) {
+                            console.error('Error unselecting item:', err);
+                            return rej(err);
+                        }
+                        res();
+                    });
+                });
+            });
+            Promise.all(promises).then(resolve).catch(reject);
         });
     });
     const deletePromises = deleted.map(id => {
@@ -219,10 +243,9 @@ app.post('/items/private', authenticateToken, (req, res) => {
             });
         });
     });
-    Promise.all([...updatePromises, ...deletePromises])
+    Promise.all([...updatePromises,  unselectPromises, ...deletePromises])
         .then(() => {
             console.log('Items updated successfully');
-            cache.del('publicItems');
             res.status(200).json({ message: 'Items updated successfully' });
         })
         .catch(err => {
@@ -231,11 +254,43 @@ app.post('/items/private', authenticateToken, (req, res) => {
         });
 });
 
+app.get('/title', (req, res) => {
+    const cachedTitle = cache.get('title');
+    if (cachedTitle) {
+        console.log('Serving title from cache');
+        return res.status(200).json({ title: cachedTitle });
+    }
+    db.get(`SELECT title FROM title WHERE id = ?`, [1], (err, row) => {
+        if (err || !row) {
+            console.error('Error fetching title:', err);
+            return res.status(404).json({ message: 'Title not found' });
+        }
+        res.status(200).json({ title: row.title });
+    });
+});
+
+app.post('/title', authenticateToken, (req, res) => {
+    const { title } = req.body;
+    if (!title) {
+        console.error('Title is required');
+        return res.status(400).json({ message: 'Title is required' });
+    }
+    db.run(`INSERT INTO title (id, title) VALUES (1, ?) ON CONFLICT(id) DO UPDATE SET title=excluded.title`, [title], function(err) {
+        if (err) {
+            console.error('Error updating title:', err);
+            return res.status(500).json({ message: 'Error updating title' });
+        }
+        cache.set('title', title);
+        console.log(`Title updated successfully`);
+        res.status(200).json({ message: 'Title updated successfully' });
+    });
+});
+
 function authenticateToken(req, res, next) {
     const token = req.headers['authorization']?.split(' ')[1];
     if (!token) return res.sendStatus(401);
     jwt.verify(token, TOKEN, (err, user) => {
-        console.log('Token verification:', { token, err, user });
+        // console.log('Token verification:', { token, err, user });
         if (err) {
             console.error('Token verification failed:', err);
             return res.sendStatus(500);

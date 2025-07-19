@@ -21,6 +21,18 @@ db.serialize(() => {
             selected INTEGER NOT NULL DEFAULT 0
         )
     `);
-});
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS title (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL
+        )
+    `);
+
+    db.run(`
+        INSERT INTO title (id, title) VALUES (1, ?)
+        ON CONFLICT(id) DO UPDATE SET title=excluded.title
+        `, ['Programs for families in need.']);
+    });
 
 module.exports = db;
