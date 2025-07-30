@@ -7,12 +7,20 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const NodeCache = require('node-cache');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const port = process.env.PORT || 5000;
 const TOKEN = process.env.JWT_SECRET;
 const upload = multer();
 const cache = new NodeCache({ stdTTL: 86400});
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.CONTACT_EMAIL,
+        pass: process.env.APPLICATION_PASSWORD
+    }
+});
 
 app.use(cors());
 app.use(express.json());
@@ -283,6 +291,31 @@ app.post('/title', authenticateToken, (req, res) => {
         cache.set('title', title);
         console.log(`Title updated successfully`);
         res.status(200).json({ message: 'Title updated successfully' });
+    });
+});
+
+app.post('/contact', (req, res) => {
+    console.log('Contact form submission received:', req.body);
+    const { name, email, message } = req.body;
+    if (!name || !email || !message) {
+        console.error('Name, email, and message are required');
+        return res.status(400).json({ message: 'Name, email, and message are required' });
+    }
+
+    const mailOptions = {
+        from: email,
+        to: process.env.CONTACT_EMAIL,
+        subject: `Contact Form Submission from ${name}`,
+        text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
+            return res.status(500).json({ message: 'Error sending email' });
+        }
+        console.log('Email sent:', info.response);
+        res.status(200).json({ message: 'Email sent successfully' });
     });
 });
 
