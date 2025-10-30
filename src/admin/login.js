@@ -9,7 +9,7 @@ function Login() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+        const apiUrl = process.env.REACT_APP_API_URL || 'https://gsff.qweb.dev/';
 
         fetch(`${apiUrl}/login`, {
             method: 'POST',
